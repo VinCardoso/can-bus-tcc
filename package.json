@@ -1,0 +1,27 @@
+{
+  "name": "can-bus-tcc",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VinCardoso/can-bus-tcc.git"
+  },
+  "keywords": [
+    "can-bus",
+    "can",
+    "raspberry-pi"
+  ],
+  "author": "Vinicius Cardoso",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VinCardoso/can-bus-tcc/issues"
+  },
+  "homepage": "https://github.com/VinCardoso/can-bus-tcc#readme",
+  "dependencies": {
+    "socketcan": "^2.4.0"
+  }
+}
