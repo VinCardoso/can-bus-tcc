@@ -2,6 +2,7 @@ var can = require('socketcan');
 var buffer = require('buffer');
 const fs = require('fs');
 
+
 data_atual = Date.now();
 file_name = data_atual+'.txt';
 

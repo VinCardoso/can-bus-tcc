@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/VinCardoso/can-bus-tcc#readme",
   "dependencies": {
-    "socketcan": "^2.4.0"
+    "socketcan": "^2.4.0",
+    "sqlite3": "^4.1.0"
   }
 }
