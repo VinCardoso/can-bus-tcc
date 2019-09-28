@@ -3,6 +3,8 @@ var buffer = require('buffer');
 
 // SQLite3 - Database
 var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('./database.db');
+var check;
 
 // Work Better with timestamp
 var moment = require('moment');
@@ -15,20 +17,27 @@ const fs = require('fs');
 // create_file(); // Criar arqiovo
 
 
-let db = new sqlite3.Database('./test1.db', sqlite3.OPEN_CREATE, (err) => {
-  if (err) {
-    console.error(err.message);
-  }
-  console.log('Connected to the chinook database.');
-});
+// let userDB = new sqlite3.Database("./user1.db", 
+//     sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, 
+//     (err) => { 
+//         // do your thing 
+//     });
 
 
-db.close((err) => {
-  if (err) {
-    console.error(err.message);
-  }
-  console.log('Close the database connection.');
+// db.close((err) => {
+//   if (err) {
+//     console.error(err.message);
+//   }
+//   console.log('Close the database connection.');
+// });
+
+db.serialize(function() {
+
+  db.run("CREATE TABLE if not exists info (ts INTEGER,ts_u INTEGER,ts_complete REAL,data_time TEXT,module TEXT,info TEXT)");
+
 });
+
+db.close();
 
 
 
