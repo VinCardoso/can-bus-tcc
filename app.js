@@ -3,14 +3,14 @@ var buffer = require('buffer');
 
 // SQLite3 - Database
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('./database.db');
+var db = new sqlite3.Database('./data.db');
 var check;
 
 // Work Better with timestamp
 var moment = require('moment');
 
 // Work with Files
-const fs = require('fs');
+// const fs = require('fs');
 
 
 // Sequencia
@@ -33,11 +33,11 @@ const fs = require('fs');
 
 db.serialize(function() {
 
-  db.run("CREATE TABLE if not exists info (ts INTEGER,ts_u INTEGER,ts_complete REAL,data_time TEXT,module TEXT,info TEXT)");
+  db.run("CREATE TABLE if not exists data (ts INTEGER,ts_u INTEGER,ts_complete REAL,data_time TEXT,module TEXT,info TEXT,upload INTEGER)");
 
 });
 
-db.close();
+// db.close();
 
 
 
@@ -45,20 +45,37 @@ db.close();
 
 
 
-// var channel = can.createRawChannel("can0", true /* ask for timestamps */);
-// channel.start();
+var channel = can.createRawChannel("can0", true /* ask for timestamps */);
+channel.start();
 
-// function toHex(number) {
-//   return ("00000000" + number.toString(16)).slice(-8);
-// }
+function toHex(number) {
+  return (number.toString(16)).slice(-8);
+}
 
-// function dumpPacket(msg) {
-// 	log_messege = '(' + (msg.ts_sec + msg.ts_usec / 1000000).toFixed(6) + ') ' +toHex(msg.id).toUpperCase() + '#' + msg.data.toString('hex').toUpperCase();
-// 	fs.appendFile(file_name,'\n '+log_messege);
-//   console.log(log_messege);
-// }
+function dumpPacket(msg) {
 
-// channel.addListener("onMessage", dumpPacket);
+	// fs.appendFile(file_name,'\n '+log_messege);
+
+	ts = msg.ts_sec;
+	ts_u = msg.ts_usec;
+	ts_complete = parseFloat(ts+"."+ts_u);
+	ts_complete_2 = ts_complete.toFixed(3);
+	data_time = moment.unix(ts_complete_2).format('YYYY-MM-DD HH:mm:ss.SSS');
+	mod = toHex(msg.id);
+	data = msg.data.toString('hex');
+	
+		db.run('INSERT INTO data(ts,ts_u,ts_complete,data_time,module,info,upload) VALUES(?, ?, ?, ?, ?, ?, ?)', [ts,ts_u,ts_complete,data_time,mod,data,0], (err) => {
+
+			if(err){
+				return console.log(err.message);
+			}
+				console.log("Row Add "+ts+" "+ts_u+" "+ts_complete+" "+data_time+" "+mod+" "+data+" "+ts_complete_2);
+			});
+
+			// db.close();
+}
+
+channel.addListener("onMessage", dumpPacket);
 
 
 
