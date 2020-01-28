@@ -1,4 +1,3 @@
-
 var can = require('socketcan');
 var buffer = require('buffer');
 
@@ -11,7 +10,8 @@ var moment = require('moment');
 
 
 // Create Table If Not Exist
-db.exec("CREATE TABLE if not exists data (ts INTEGER,ts_u INTEGER,ts_complete REAL,data_time TEXT,module TEXT,info TEXT,upload INTEGER)");
+db.exec("CREATE TABLE if not exists data (id INTEGER PRIMARY KEY AUTOINCREMENT, ts INTEGER,ts_u INTEGER,ts_complete REAL,data_time TEXT,module TEXT,info TEXT,upload INTEGER)");
+db.pragma('journal_mode = WAL');
 
 // Database Prapere to Add Row
 const stmt = db.prepare("INSERT INTO data(ts,ts_u,ts_complete,data_time,module,info,upload) VALUES(?, ?, ?, ?, ?, ?, ?)");
@@ -30,7 +30,7 @@ function dumpPacket(msg) {
 	data = msg.data.toString('hex');
 	
 	const add = stmt.run(ts,ts_u,ts_complete,data_time,mod,data,0);
-	console.log("Row Add "+ts+" "+ts_u+" "+ts_complete+" "+data_time+" "+mod+" "+data+" "+ts_complete_2);
+	// console.log("Row Add "+ts+" "+ts_u+" "+ts_complete+" "+data_time+" "+mod+" "+data+" "+ts_complete_2);
 
 }
 
